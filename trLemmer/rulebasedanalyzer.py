@@ -2,7 +2,7 @@ from trLemmer.attributes import PhoneticAttribute, calculate_phonetic_attributes
 from trLemmer.morphotactics import SurfaceTransition, SearchPath, generate_surface
 import logging
 
-logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.ERROR)
 
 
 class RuleBasedAnalyzer:
@@ -50,15 +50,15 @@ class RuleBasedAnalyzer:
                 # path as a correct result.
                 if len(path.tail) == 0:
                     if path.is_terminal and PhoneticAttribute.CannotTerminate not in path.phonetic_attributes:
-                        logging.warning(f"APPENDING RESULT: {path}")
+                        #logging.warning(f"APPENDING RESULT: {path}")
                         result.append(path)
                         continue
                 # Creates new paths with outgoing and matching transitions.
                 new_paths = self.advance(path)
-                logging.debug(f"\n--\nNew paths are: ")
-                for p in new_paths:
-                    logging.debug(f"-- {p}")
-                logging.debug('')
+                #logging.debug(f"\n--\nNew paths are: ")
+                #for p in new_paths:
+                    #logging.debug(f"-- {p}")
+                #logging.debug('')
                 all_new_paths.extend(new_paths)
             current_paths = all_new_paths
         return result
@@ -77,7 +77,7 @@ class RuleBasedAnalyzer:
         for transition in path.current_state.outgoing:
             # if tail is empty and this transitions surface is not empty, no need to check.
             if len(path.tail) == 0 and transition.has_surface_form:
-                logging.debug(f"Rejecting path {path}: Path and transition surface mismatch: ")
+                #logging.debug(f"Rejecting path {path}: Path and transition surface mismatch: ")
                 continue
 
             surface = generate_surface(
@@ -87,12 +87,12 @@ class RuleBasedAnalyzer:
             # no need to go further if generated surface form is not a prefix of the paths's tail.
             tail_starts_with = path.tail.startswith(surface)
             if not tail_starts_with:
-                logging.debug(f"Rejecting path {path}: tail doesnt start with {path.tail}-{surface}")
+                #logging.debug(f"Rejecting path {path}: tail doesnt start with {path.tail}-{surface}")
                 continue
 
             # check conditions.
             if not transition.can_pass(path):
-                logging.debug(f"Rejecting path {path}-{transition}: can't pass")
+                #logging.debug(f"Rejecting path {path}-{transition}: can't pass")
                 continue
 
             # epsilon (empty) transition. Add and continue. Use existing attributes.
@@ -100,7 +100,7 @@ class RuleBasedAnalyzer:
                 blank_surface_transition = SurfaceTransition("", transition)
                 new_path = path.copy(blank_surface_transition, path.phonetic_attributes)
                 new_paths.append(new_path)
-                logging.debug(f"Appending path {new_path}")
+                #logging.debug(f"Appending path {new_path}")
                 continue
 
             surface_transition = SurfaceTransition(surface, transition)
@@ -123,11 +123,11 @@ class RuleBasedAnalyzer:
                 attributes.add(PhoneticAttribute.ExpectsVowel)
                 attributes.add(PhoneticAttribute.CannotTerminate)
             p = path.copy(surface_transition, attributes)
-            logging.debug(f"P path: {p}")
+            #logging.debug(f"P path: {p}")
             new_paths.append(p)
-        logging.debug(f"FINAL: ")
-        for i, p in enumerate(new_paths):
-            logging.debug(f"\t {i}: {p}")
+        #logging.debug(f"FINAL: ")
+        #for i, p in enumerate(new_paths):
+            #logging.debug(f"\t {i}: {p}")
         # print()
         return new_paths
 
