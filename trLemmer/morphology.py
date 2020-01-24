@@ -391,7 +391,7 @@ class MorphAnalyzer:
 
         punctuation = list(string.punctuation)
         punctuation.remove("'")
-        print(f"Punctuation: {string.punctuation}/ {punctuation}")
+        #print(f"Punctuation: {string.punctuation}/ {punctuation}")
         result = []
         sentences = sent_tokenize(text, language="turkish")
         if by_sent:
