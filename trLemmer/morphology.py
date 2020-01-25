@@ -427,6 +427,7 @@ class MorphAnalyzer:
         if len(analysis) == 0:
             return [word]
         else:
+            return list(set([tuple([morpheme[1] for morpheme in single_analysis.morphemes]) for single_analysis in analysis]))
             return list(set([a.dict_item.lemma for a in analysis]))
 
     def analyze_sentence(self, sentence):
